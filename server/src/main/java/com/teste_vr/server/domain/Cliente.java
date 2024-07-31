@@ -2,6 +2,8 @@ package com.teste_vr.server.domain;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "cliente")
 public class Cliente {
@@ -14,4 +16,7 @@ public class Cliente {
 
     @Column(nullable = false)
     private double limiteCompra;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Fatura> faturas;
 }
