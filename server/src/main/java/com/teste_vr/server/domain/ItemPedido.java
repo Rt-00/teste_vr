@@ -2,6 +2,8 @@ package com.teste_vr.server.domain;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 /**
  * Classe que representa um Item de Pedido.
  */
@@ -39,7 +41,7 @@ public class ItemPedido {
      * Preço do Item de Pedido.
      */
     @Column(nullable = false)
-    private double preco;
+    private BigDecimal preco;
 
     /**
      * Construtor sem argumentos.
@@ -124,7 +126,7 @@ public class ItemPedido {
      *
      * @return o Preço do Item de Pedido.
      */
-    public double getPreco() {
+    public BigDecimal getPreco() {
         return preco;
     }
 
@@ -133,7 +135,7 @@ public class ItemPedido {
      *
      * @param preco O Preço do Item de Pedido.
      */
-    public void setPreco(double preco) {
+    public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
 }

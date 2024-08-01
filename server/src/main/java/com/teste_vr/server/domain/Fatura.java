@@ -2,6 +2,7 @@ package com.teste_vr.server.domain;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -35,7 +36,7 @@ public class Fatura {
      * Valor total da Fatura.
      */
     @Column(nullable = false)
-    private double valorTotal;
+    private BigDecimal valorTotal;
 
     /**
      * Construtor sem argumentos.
@@ -102,7 +103,7 @@ public class Fatura {
      *
      * @return O Valor Total da Fatura.
      */
-    public double getValorTotal() {
+    public BigDecimal getValorTotal() {
         return valorTotal;
     }
 
@@ -111,7 +112,7 @@ public class Fatura {
      *
      * @param valorTotal o Valor Total da Fatura.
      */
-    public void setValorTotal(double valorTotal) {
+    public void setValorTotal(BigDecimal valorTotal) {
         this.valorTotal = valorTotal;
     }
 }

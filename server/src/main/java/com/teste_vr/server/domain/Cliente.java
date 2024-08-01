@@ -2,6 +2,7 @@ package com.teste_vr.server.domain;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class Cliente {
      * Limite de Compra do Cliente.
      */
     @Column(nullable = false)
-    private double limiteCompra;
+    private BigDecimal limiteCompra;
 
     /**
      * Lista de Faturas do Cliente.
@@ -82,7 +83,7 @@ public class Cliente {
      *
      * @return O Limite de Compra do Cliente.
      */
-    public double getLimiteCompra() {
+    public BigDecimal getLimiteCompra() {
         return limiteCompra;
     }
 
@@ -91,14 +92,14 @@ public class Cliente {
      *
      * @param limiteCompra O Limite de Compra do Cliente.
      */
-    public void setLimiteCompra(double limiteCompra) {
+    public void setLimiteCompra(BigDecimal limiteCompra) {
         this.limiteCompra = limiteCompra;
     }
 
     /**
-     * Retorna a {@link List} de Faturas do Cliente.
+     * Retorna a {@link List} de {@link Fatura} do Cliente.
      *
-     * @return A {@link List} de Faturas do Cliente.
+     * @return A {@link List} de {@link Fatura} do Cliente.
      */
     public List<Fatura> getFaturas() {
         return faturas;
