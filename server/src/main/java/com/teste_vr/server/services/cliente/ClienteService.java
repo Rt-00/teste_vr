@@ -49,15 +49,31 @@ public class ClienteService {
         return clienteMapper.toListClienteDTO(clienteSalvo);
     }
 
-    public ListClienteDTO atualizarCliente(UpdateClienteDTO updateClienteDTO) {
-        clienteValidationService.validarUpdateClienteDTO(updateClienteDTO);
-        Optional<Cliente> clienteOptional = clienteRepository.findById(updateClienteDTO.id());
-        if (clienteOptional.isEmpty()) {
-            throw new ValidationException("Cliente não encontrado");
+
+    /**
+     * Atualiza um Cliente existente.
+     *
+     * @param updateClienteDTO um {@link UpdateClienteDTO} contendo os dados do Cliente a ser atualizado.
+     * @param id               O ID do Cliente a ser atualizado.
+     * @return um {@link ListClienteDTO} com o Cliente atualizado.
+     */
+    public ListClienteDTO atualizarCliente(UpdateClienteDTO updateClienteDTO, Long id) {
+        clienteValidationService.validarUpdateClienteDTO(updateClienteDTO, id);
+
+        Cliente cliente = clienteRepository.findById(id).orElseThrow(
+                () -> new ValidationException("Cliente não encontrado."));
+
+        if (updateClienteDTO.nome() != null) {
+            cliente.setNome(updateClienteDTO.nome());
         }
-        Cliente cliente = clienteMapper.toEntity(updateClienteDTO);
-        Cliente clienteAtualizado = clienteRepository.save(cliente);
-        return clienteMapper.toListClienteDTO(clienteAtualizado);
+
+        if (updateClienteDTO.limiteCompra() != null) {
+            cliente.setLimiteCompra(updateClienteDTO.limiteCompra());
+        }
+
+        cliente = clienteRepository.save(cliente);
+
+        return clienteMapper.toListClienteDTO(cliente);
     }
 
     /**

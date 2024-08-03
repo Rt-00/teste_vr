@@ -33,7 +33,7 @@ public class Cliente {
     /**
      * Lista de Faturas do Cliente.
      */
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cliente")
     private List<Fatura> faturas;
 
     /**

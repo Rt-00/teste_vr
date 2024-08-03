@@ -29,11 +29,12 @@ public class ClienteMapper {
      * Converte um DTO de atualização de Cliente em uma entidade Cliente.
      *
      * @param updateClienteDTO O {@link UpdateClienteDTO} que será convertido em {@link Cliente}.
+     * @param id               O ID do Cliente.
      * @return A entidade {@link Cliente} correspondente.
      */
-    public Cliente toEntity(UpdateClienteDTO updateClienteDTO) {
+    public Cliente toEntity(UpdateClienteDTO updateClienteDTO, Long id) {
         Cliente cliente = new Cliente();
-        cliente.setId(updateClienteDTO.id());
+        cliente.setId(id);
         cliente.setNome(updateClienteDTO.nome());
         cliente.setLimiteCompra(updateClienteDTO.limiteCompra());
         return cliente;
