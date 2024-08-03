@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -126,6 +127,27 @@ public class ClienteServiceTest {
     }
 
     /**
+     * Testa o método {@link ClienteService#salvarCliente(CreateClienteDTO)}.
+     * Verifica se uma exceção é lançada quando já existe um cliente com o código cadastrado.
+     */
+    @Test
+    public void testSalvarClienteCodigoJaCadastrado() {
+        // Configuração
+        Long codigoCliente = 1L;
+        CreateClienteDTO createClientDTO = new CreateClienteDTO(codigoCliente, "Novo Cliente",
+                new BigDecimal("1000.0"));
+
+        when(clienteRepository.findByCodigo(codigoCliente)).thenReturn(Optional.of(new Cliente()));
+
+        // Ação e Validação
+        DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class,
+                () -> clienteService.salvarCliente(createClientDTO));
+
+        assertEquals("Cliente com o código: " + codigoCliente + " já cadastrado.",
+                exception.getMessage());
+    }
+
+    /**
      * Testa o método {@link ClienteService#atualizarCliente(UpdateClienteDTO, Long)}.
      * Verifica se o Cliente é atualizado corretamente e se o DTO retornado está correto.
      */
@@ -171,6 +193,29 @@ public class ClienteServiceTest {
 
         assertEquals("Cliente não encontrado.", exception.getMessage(),
                 "A mensagem da exceção deve indicar que o cliente não foi encontrado.");
+    }
+
+    /**
+     * Testa o método {@link ClienteService#atualizarCliente(UpdateClienteDTO, Long)}.
+     * <p>
+     * Verifica se uma exceção é lançada quando já existe um cliente com o código cadastrado.
+     */
+    @Test
+    public void testAtualizarClienteCodigoJaCadastrado() {
+        // Configuração
+        Long codigoCliente = 1L;
+        UpdateClienteDTO updateClientDTO = new UpdateClienteDTO(codigoCliente, "Cliente Atualizado",
+                BigDecimal.valueOf(2000.0));
+
+        when(clienteRepository.findByCodigo(codigoCliente)).thenReturn(Optional.of(new Cliente()));
+        when(clienteRepository.findByCodigo(codigoCliente)).thenReturn(Optional.of(new Cliente())); // Simula que já existe um cliente com o mesmo código
+
+        // Ação e Validação
+        DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () ->
+                clienteService.atualizarCliente(updateClientDTO, codigoCliente));
+
+        assertEquals("Cliente com o código: " + codigoCliente + " já cadastrado.",
+                exception.getMessage());
     }
 
     /**
