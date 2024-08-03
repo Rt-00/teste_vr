@@ -19,6 +19,10 @@ public class ClienteValidationService {
      * @throws IllegalArgumentException Se algum dado do Cliente for inválido.
      */
     public void validarClienteClienteDTO(CreateClienteDTO createClienteDTO) {
+        if (createClienteDTO.codigo() == null || createClienteDTO.codigo() <= 0) {
+            throw new IllegalArgumentException("O código não pode ser nulo ou vazio.");
+        }
+
         if (createClienteDTO.nome() == null || createClienteDTO.nome().isEmpty()) {
             throw new IllegalArgumentException("O nome não pode ser nulo ou vazio.");
         }
@@ -33,9 +37,9 @@ public class ClienteValidationService {
      * @param updateClienteDTO O {@link UpdateClienteDTO} contendo os dados do Cliente a ser validado.
      * @throws IllegalArgumentException Se algum dado do Cliente for inválido.
      */
-    public void validarUpdateClienteDTO(UpdateClienteDTO updateClienteDTO, Long id) {
-        if (id == null || id <= 0) {
-            throw new IllegalArgumentException("ID inválido.");
+    public void validarUpdateClienteDTO(UpdateClienteDTO updateClienteDTO, Long codigo) {
+        if (codigo == null || codigo <= 0) {
+            throw new IllegalArgumentException("Código inválido.");
         }
 
         if (updateClienteDTO.nome() != null && updateClienteDTO.nome().isEmpty()) {

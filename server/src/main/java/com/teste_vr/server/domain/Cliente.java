@@ -19,6 +19,12 @@ public class Cliente {
     private Long id;
 
     /**
+     * Código do Cliente.
+     */
+    @Column(nullable = false, unique = true)
+    private Long codigo;
+
+    /**
      * Nome do Cliente.
      */
     @Column(nullable = false)
@@ -112,5 +118,23 @@ public class Cliente {
      */
     public void setFaturas(List<Fatura> faturas) {
         this.faturas = faturas;
+    }
+
+    /**
+     * Retorna o código do Cliente.
+     *
+     * @return O Código do Cliente.
+     */
+    public Long getCodigo() {
+        return codigo;
+    }
+
+    /**
+     * Define o código do Cliente.
+     *
+     * @param codigo O código do Cliente.
+     */
+    public void setCodigo(Long codigo) {
+        this.codigo = codigo;
     }
 }

@@ -17,9 +17,16 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDTO);
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> EntidadeDuplicada(DataIntegrityViolationException exception) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), "400");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDTO);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Object> ArgumentosInvalidos(IllegalArgumentException exception) {
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
+        ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), "422");
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exceptionDTO);
     }
 
 

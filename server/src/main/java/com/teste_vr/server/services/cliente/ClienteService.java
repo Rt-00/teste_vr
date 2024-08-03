@@ -8,6 +8,7 @@ import com.teste_vr.server.mappers.ClienteMapper;
 import com.teste_vr.server.repositories.ClienteRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,8 +46,15 @@ public class ClienteService {
      */
     public ListClienteDTO salvarCliente(CreateClienteDTO createClienteDTO) {
         this.clienteValidationService.validarClienteClienteDTO(createClienteDTO);
+
+        if (clienteRepository.findByCodigo(createClienteDTO.codigo()).isPresent()) {
+            throw new DataIntegrityViolationException("Usuário com o código: " + createClienteDTO.codigo() +
+                    " já cadastrado.");
+        }
+
         Cliente cliente = this.clienteMapper.toEntity(createClienteDTO);
         Cliente clienteSalvo = clienteRepository.save(cliente);
+
         return clienteMapper.toListClienteDTO(clienteSalvo);
     }
 
@@ -55,14 +63,18 @@ public class ClienteService {
      * Atualiza um Cliente existente.
      *
      * @param updateClienteDTO um {@link UpdateClienteDTO} contendo os dados do Cliente a ser atualizado.
-     * @param id               O ID do Cliente a ser atualizado.
+     * @param codigo           O Código do Cliente a ser atualizado.
      * @return um {@link ListClienteDTO} com o Cliente atualizado.
      */
-    public ListClienteDTO atualizarCliente(UpdateClienteDTO updateClienteDTO, Long id) {
-        clienteValidationService.validarUpdateClienteDTO(updateClienteDTO, id);
+    public ListClienteDTO atualizarCliente(UpdateClienteDTO updateClienteDTO, Long codigo) {
+        clienteValidationService.validarUpdateClienteDTO(updateClienteDTO, codigo);
 
-        Cliente cliente = clienteRepository.findById(id).orElseThrow(
+        Cliente cliente = clienteRepository.findByCodigo(codigo).orElseThrow(
                 () -> new EntityNotFoundException("Cliente não encontrado."));
+
+        if (updateClienteDTO.codigo() != null) {
+            cliente.setCodigo(updateClienteDTO.codigo());
+        }
 
         if (updateClienteDTO.nome() != null) {
             cliente.setNome(updateClienteDTO.nome());
@@ -78,14 +90,14 @@ public class ClienteService {
     }
 
     /**
-     * Busca um Cliente pelo seu ID no banco de dados.
+     * Busca um Cliente pelo seu Código no banco de dados.
      *
-     * @param id O ID do {@link Cliente} a ser buscado.
+     * @param codigo O Código do {@link Cliente} a ser buscado.
      * @return O {@link ListClienteDTO} do {@link Cliente} encontrado.
      * @throws ValidationException Se o Cliente não for encontrado.
      */
-    public ListClienteDTO obterClientePorId(Long id) {
-        return clienteRepository.findById(id).map(clienteMapper::toListClienteDTO)
+    public ListClienteDTO obterClientePorCodigo(Long codigo) {
+        return clienteRepository.findByCodigo(codigo).map(clienteMapper::toListClienteDTO)
                 .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
     }
 
@@ -102,17 +114,15 @@ public class ClienteService {
     }
 
     /**
-     * Delete um Cliente pelo Seu ID.
+     * Delete um Cliente pelo Seu Código.
      *
-     * @param id O ID do Cliente a ser deletado.
+     * @param codigo O Código do Cliente a ser deletado.
      * @throws ValidationException Se o Cliente não for encontrado.
      */
-    public void excluirCliente(Long id) {
-        Optional<Cliente> clienteOptional = clienteRepository.findById(id);
-        if (clienteOptional.isEmpty()) {
-            throw new EntityNotFoundException("Cliente não encontrado");
-        }
+    public void excluirCliente(Long codigo) {
+        Cliente cliente = clienteRepository.findByCodigo(codigo)
+                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
 
-        clienteRepository.deleteById(id);
+        clienteRepository.delete(cliente);
     }
 }

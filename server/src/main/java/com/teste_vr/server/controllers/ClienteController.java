@@ -31,7 +31,7 @@ public class ClienteController {
     }
 
     /**
-     * Cria um novo {@link Cliente}.
+     * Cria um {@link Cliente}.
      *
      * @param createClienteDTO Um {@link CreateClienteDTO} contendo os dados do Cliente a ser criado.
      * @return Uma {@link ResponseEntity} com o {@link ListClienteDTO} do Cliente criado.
@@ -43,16 +43,16 @@ public class ClienteController {
     }
 
     /**
-     * Atualiza um {@link Cliente} com base no seu ID.
+     * Atualiza um {@link Cliente} com base no seu Código.
      *
-     * @param id               O ID do Cliente que será atualizado.
+     * @param codigo           O Código do Cliente que será atualizado.
      * @param updateClienteDTO Um {@link UpdateClienteDTO} contendo os dados do Cliente a ser atualizado.
      * @return Uma {@link ResponseEntity} com o {@link ListClienteDTO} do Cliente atualizado.
      */
-    @PutMapping("/{id}")
-    public ResponseEntity<ListClienteDTO> atualizarCliente(@PathVariable Long id,
+    @PutMapping("/{codigo}")
+    public ResponseEntity<ListClienteDTO> atualizarCliente(@PathVariable Long codigo,
                                                            @RequestBody UpdateClienteDTO updateClienteDTO) {
-        ListClienteDTO clienteAtualizado = clienteService.atualizarCliente(updateClienteDTO, id);
+        ListClienteDTO clienteAtualizado = clienteService.atualizarCliente(updateClienteDTO, codigo);
         return new ResponseEntity<>(clienteAtualizado, HttpStatus.OK);
     }
 
@@ -68,25 +68,25 @@ public class ClienteController {
     }
 
     /**
-     * Busca um Cliente pelo seu ID.
+     * Busca um Cliente pelo seu Código.
      *
-     * @param id O ID do Cliente a ser buscado.
+     * @param codigo O código do Cliente a ser buscado.
      * @return O {@link ListClienteDTO} do Cliente encontrado.
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<ListClienteDTO> obterClientePorId(@PathVariable Long id) {
-        return new ResponseEntity<>(clienteService.obterClientePorId(id), HttpStatus.OK);
+    @GetMapping("/{codigo}")
+    public ResponseEntity<ListClienteDTO> obterClientePorCodigo(@PathVariable Long codigo) {
+        return new ResponseEntity<>(clienteService.obterClientePorCodigo(codigo), HttpStatus.OK);
     }
 
     /**
-     * Deleta um Cliente pelo seu ID.
+     * Deleta um Cliente pelo seu Código.
      *
-     * @param id O ID do cliente a ser deletado.
+     * @param codigo O Código do Cliente a ser deletado.
      * @return Uma resposta vazia indicando sucesso.
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluirCliente(@PathVariable Long id) {
-        clienteService.excluirCliente(id);
+    @DeleteMapping("/{codigo}")
+    public ResponseEntity<Void> excluirCliente(@PathVariable Long codigo) {
+        clienteService.excluirCliente(codigo);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

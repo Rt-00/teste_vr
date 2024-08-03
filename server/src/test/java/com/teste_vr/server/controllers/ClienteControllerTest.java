@@ -54,7 +54,8 @@ public class ClienteControllerTest {
      */
     @Test
     public void testSalvarCliente() throws Exception {
-        CreateClienteDTO createClientDTO = new CreateClienteDTO("Teste", new BigDecimal("1000.0"));
+        CreateClienteDTO createClientDTO = new CreateClienteDTO(123L, "Teste",
+                new BigDecimal("1000.0"));
         ListClienteDTO clientDTO = new ListClienteDTO(1L, "Teste", new BigDecimal("1000.0"));
 
         when(clienteService.salvarCliente(createClientDTO)).thenReturn(clientDTO);
@@ -77,7 +78,8 @@ public class ClienteControllerTest {
     @Test
     public void testAtualizarCliente() throws Exception {
         Long clientAttId = 1L;
-        UpdateClienteDTO updateClientDTO = new UpdateClienteDTO("Nome Atualizado", new BigDecimal("2000.0"));
+        UpdateClienteDTO updateClientDTO = new UpdateClienteDTO(123L, "Nome Atualizado",
+                new BigDecimal("2000.0"));
 
         ListClienteDTO clientDTO = new ListClienteDTO(1L, "Nome Atualizado", new BigDecimal("2000.0"));
 
@@ -102,7 +104,7 @@ public class ClienteControllerTest {
     @Test
     public void testAtualizarClienteNaoEncontrado() throws Exception {
         Long clientAttId = 1L;
-        UpdateClienteDTO updateClientDTO = new UpdateClienteDTO("Teste Atualizado",
+        UpdateClienteDTO updateClientDTO = new UpdateClienteDTO(123L, "Teste Atualizado",
                 new BigDecimal("2000.0"));
 
         when(clienteService.atualizarCliente(updateClientDTO, clientAttId)).thenThrow(new EntityNotFoundException(
@@ -124,7 +126,7 @@ public class ClienteControllerTest {
      */
     @Test
     public void testExcluirCliente() throws Exception {
-        mockMvc.perform(delete("/clientes/{id}", 1L))
+        mockMvc.perform(delete("/clientes/{codigo}", 1L))
                 .andExpect(status().isNoContent());
     }
 
@@ -137,12 +139,12 @@ public class ClienteControllerTest {
      */
     @Test
     public void testExcluirClienteNaoEncontrado() throws Exception {
-        doThrow(new EntityNotFoundException("Cliente não encontrado com o ID: 1"))
+        doThrow(new EntityNotFoundException("Cliente não encontrado."))
                 .when(clienteService).excluirCliente(1L);
 
-        mockMvc.perform(delete("/clientes/{id}", 1L))
+        mockMvc.perform(delete("/clientes/{codigo}", 1L))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message", is("Cliente não encontrado com o ID: 1")));
+                .andExpect(jsonPath("$.message", is("Cliente não encontrado.")));
     }
 
     /**
@@ -170,7 +172,7 @@ public class ClienteControllerTest {
     }
 
     /**
-     * Testa o endpoint de listagem de cliente por ID.
+     * Testa o endpoint de listagem de cliente por Codigo.
      * <p>
      * Verifica se a busca por um cliente específico é bem-sucedida e se a resposta é retornada com o status 200 OK.
      *
@@ -180,30 +182,30 @@ public class ClienteControllerTest {
     public void testListarClientePorId() throws Exception {
         ListClienteDTO clientDTO = new ListClienteDTO(1L, "Cliente 1", new BigDecimal("1000.0"));
 
-        when(clienteService.obterClientePorId(1L)).thenReturn((clientDTO));
+        when(clienteService.obterClientePorCodigo(1L)).thenReturn((clientDTO));
 
-        mockMvc.perform(get("/clientes/{id}", 1L))
+        mockMvc.perform(get("/clientes/{codigo}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nome", is("Cliente 1")))
                 .andExpect(jsonPath("$.limiteCompra", is(1000.0)));
     }
 
     /**
-     * Testa o endpoint de listagem de cliente por ID.
+     * Testa o endpoint de listagem de cliente por Código.
      * <p>
      * Verifica se o retorno é 404 Not Found quando o Cliente não é encontrado.
      *
      * @throws Exception se ocorrer um erro na execução do teste
      */
     @Test
-    public void testListarPorIdClienteNaoEncontrado() throws Exception {
-        Long clienteId = 1L;
+    public void testListarPorCodigoClienteNaoEncontrado() throws Exception {
+        Long clienteCodigo = 1L;
 
-        when(clienteService.obterClientePorId(clienteId)).thenThrow(
-                new EntityNotFoundException("Cliente não encontrado" + clienteId));
+        when(clienteService.obterClientePorCodigo(clienteCodigo)).thenThrow(
+                new EntityNotFoundException("Cliente não encontrado" + clienteCodigo));
 
-        mockMvc.perform(get("/clientes/{id}", clienteId))
+        mockMvc.perform(get("/clientes/{codigo}", clienteCodigo))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message", is("Cliente não encontrado" + clienteId)));
+                .andExpect(jsonPath("$.message", is("Cliente não encontrado" + clienteCodigo)));
     }
 }

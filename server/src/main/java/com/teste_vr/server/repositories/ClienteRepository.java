@@ -3,6 +3,8 @@ package com.teste_vr.server.repositories;
 import com.teste_vr.server.domain.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 /**
  * Repositório para {@link Cliente}.
  * <p>
@@ -10,4 +12,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * operações customizadas.
  */
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+    Optional<Cliente> findByCodigo(Long codigo);
 }

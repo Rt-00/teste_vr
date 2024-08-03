@@ -7,34 +7,35 @@ import com.teste_vr.server.dtos.cliente.UpdateClienteDTO;
 import org.springframework.stereotype.Component;
 
 /**
- * Mapper responsável por realizar a conversão entre a entidade Cliente e seus DTOs.
+ * Mapper responsável por realizar a conversão entre a entidade Cliente e os seus DTOs.
  */
 @Component
 public class ClienteMapper {
 
     /**
-     * Converte um DTO de criação de Cliente em uma entidade Cliente.
+     * Converte um DTO de criação de Cliente numa entidade Cliente.
      *
      * @param createClienteDTO O {@link CreateClienteDTO} que será convertido {@link Cliente}.
      * @return A entidade {@link Cliente} correspondente.
      */
     public Cliente toEntity(CreateClienteDTO createClienteDTO) {
         Cliente cliente = new Cliente();
+        cliente.setCodigo(createClienteDTO.codigo());
         cliente.setNome(createClienteDTO.nome());
         cliente.setLimiteCompra(createClienteDTO.limiteCompra());
         return cliente;
     }
 
     /**
-     * Converte um DTO de atualização de Cliente em uma entidade Cliente.
+     * Converte um DTO de atualização de Cliente numa entidade Cliente.
      *
      * @param updateClienteDTO O {@link UpdateClienteDTO} que será convertido em {@link Cliente}.
-     * @param id               O ID do Cliente.
+     * @param codigo               O Código do Cliente.
      * @return A entidade {@link Cliente} correspondente.
      */
-    public Cliente toEntity(UpdateClienteDTO updateClienteDTO, Long id) {
+    public Cliente toEntity(UpdateClienteDTO updateClienteDTO, Long codigo) {
         Cliente cliente = new Cliente();
-        cliente.setId(id);
+        cliente.setCodigo(updateClienteDTO.codigo());
         cliente.setNome(updateClienteDTO.nome());
         cliente.setLimiteCompra(updateClienteDTO.limiteCompra());
         return cliente;
@@ -48,7 +49,7 @@ public class ClienteMapper {
      */
     public ListClienteDTO toListClienteDTO(Cliente cliente) {
         return new ListClienteDTO(
-                cliente.getId(),
+                cliente.getCodigo(),
                 cliente.getNome(),
                 cliente.getLimiteCompra()
         );

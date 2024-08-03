@@ -8,7 +8,7 @@ import com.teste_vr.server.mappers.ClienteMapper;
 import com.teste_vr.server.repositories.ClienteRepository;
 import com.teste_vr.server.services.cliente.ClienteService;
 import com.teste_vr.server.services.cliente.ClienteValidationService;
-import jakarta.validation.ValidationException;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -82,22 +82,22 @@ public class ClienteServiceTest {
      * Verifica se é retornado todos os Clientes cadastrados.
      */
     @Test
-    public void testListarClientePorId() {
+    public void testListarClientePorCodigo() {
         ListClienteDTO clienteDTO1 = new ListClienteDTO(1L, "Cliente 1", new BigDecimal("1000.0"));
 
         Cliente cliente1 = new Cliente();
+        cliente1.setCodigo(1L);
         cliente1.setNome("Cliente 1");
         cliente1.setLimiteCompra(new BigDecimal("1000.0"));
 
-        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente1));
+        when(clienteRepository.findByCodigo(1L)).thenReturn(Optional.of(cliente1));
         when(clienteMapper.toListClienteDTO(cliente1)).thenReturn(clienteDTO1);
 
-        ListClienteDTO resultado = clienteService.obterClientePorId(1L);
+        ListClienteDTO resultado = clienteService.obterClientePorCodigo(1L);
 
         assertNotNull(resultado);
         assertEquals("Cliente 1", resultado.nome());
         assertEquals(new BigDecimal("1000.0"), resultado.limiteCompra());
-
     }
 
     /**
@@ -106,7 +106,7 @@ public class ClienteServiceTest {
      */
     @Test
     public void testSalvarCliente() {
-        CreateClienteDTO createClientDTO = new CreateClienteDTO("Teste", new BigDecimal("1000.00"));
+        CreateClienteDTO createClientDTO = new CreateClienteDTO(123L, "Teste", new BigDecimal("1000.00"));
 
         Cliente cliente = new Cliente();
         cliente.setNome("Teste");
@@ -131,33 +131,26 @@ public class ClienteServiceTest {
      */
     @Test
     public void testAtualizarCliente() {
-        Long clientAttId = 1L;
-        UpdateClienteDTO updateClienteDTO = new UpdateClienteDTO("Teste", new BigDecimal("1000.0"));
+        UpdateClienteDTO updateClientDTO = new UpdateClienteDTO(123L, "Nome Atualizado",
+                BigDecimal.valueOf(2000.0));
 
         Cliente cliente = new Cliente();
-        cliente.setId(1L);
+        cliente.setCodigo(1L);
         cliente.setNome("Teste");
-        cliente.setLimiteCompra(new BigDecimal("1000.00"));
+        cliente.setLimiteCompra(new BigDecimal("1000.0"));
 
-        Cliente clienteAtualizado = new Cliente();
-        clienteAtualizado.setId(1L);
-        clienteAtualizado.setNome("Teste Atualizado");
-        clienteAtualizado.setLimiteCompra(new BigDecimal("2000.0"));
+        ListClienteDTO clientDTO = new ListClienteDTO(123L, "Nome Atualizado", BigDecimal.valueOf(2000.0));
 
-        ListClienteDTO listClienteDTO = new ListClienteDTO(1L, "Teste Atualizado",
-                new BigDecimal("2000.0"));
+        when(clienteRepository.findByCodigo(1L)).thenReturn(Optional.of(cliente));
+        when(clienteRepository.save(cliente)).thenReturn(cliente);
+        when(clienteMapper.toListClienteDTO(cliente)).thenReturn(clientDTO);
 
-        when(clienteRepository.findById(1L)).thenReturn(java.util.Optional.of(cliente));
-        when(clienteRepository.save(cliente)).thenReturn(clienteAtualizado);
-        when(clienteMapper.toListClienteDTO(clienteAtualizado)).thenReturn(listClienteDTO);
+        ListClienteDTO resultado = clienteService.atualizarCliente(updateClientDTO, cliente.getCodigo());
 
-        ListClienteDTO resultado = clienteService.atualizarCliente(updateClienteDTO, clientAttId);
-
-        assertNotNull(resultado, "O resultado não deve ser nulo.");
-        assertEquals("Teste Atualizado", resultado.nome(),
-                "O nome atualizado do cliente deve ser 'Teste Atualizado'.");
-        assertEquals(new BigDecimal("2000.0"), resultado.limiteCompra(),
-                "O limite de compra atualizado do cliente deve ser 2000.0.");
+        assertNotNull(resultado);
+        assertEquals(123L, resultado.codigo());
+        assertEquals("Nome Atualizado", resultado.nome());
+        assertEquals(BigDecimal.valueOf(2000.0), resultado.limiteCompra());
     }
 
     /**
@@ -167,11 +160,12 @@ public class ClienteServiceTest {
     @Test
     public void testAtualizarClienteClienteNaoEncontrado() {
         Long clientAttId = 1L;
-        UpdateClienteDTO updateClienteDTO = new UpdateClienteDTO("Teste", new BigDecimal("1000.0"));
+        UpdateClienteDTO updateClienteDTO = new UpdateClienteDTO(123L, "Teste",
+                new BigDecimal("1000.0"));
 
-        when(clienteRepository.findById(1L)).thenReturn(java.util.Optional.empty());
+        when(clienteRepository.findByCodigo(clientAttId)).thenReturn(java.util.Optional.empty());
 
-        ValidationException exception = assertThrows(ValidationException.class,
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> clienteService.atualizarCliente(updateClienteDTO, clientAttId),
                 "Deveria lançar uma exceção quando o cliente não é encontrado.");
 
@@ -185,20 +179,18 @@ public class ClienteServiceTest {
      */
     @Test
     public void testeExcluirCliente() {
-        Long clienteId = 1L;
-
+        // Configuração
+        Long codigoCliente = 1L;
         Cliente cliente = new Cliente();
-        cliente.setId(clienteId);
-        cliente.setNome("Teste");
-        cliente.setLimiteCompra(new BigDecimal("1000.0"));
+        cliente.setCodigo(codigoCliente);
 
-        when(clienteRepository.existsById(clienteId)).thenReturn(true);
-        when(clienteRepository.findById(clienteId)).thenReturn(java.util.Optional.of(cliente));
+        when(clienteRepository.findByCodigo(codigoCliente)).thenReturn(Optional.of(cliente));
 
-        assertDoesNotThrow(() -> clienteService.excluirCliente(clienteId),
-                "Não deve lançar exceção ao deletar um cliente existente.");
+        // Ação
+        clienteService.excluirCliente(codigoCliente);
 
-        verify(clienteRepository, times(1)).deleteById(clienteId);
+        // Validação
+        verify(clienteRepository, times(1)).delete(cliente);
     }
 
     /**
@@ -207,12 +199,12 @@ public class ClienteServiceTest {
      */
     @Test
     public void testExcluirClienteClienteNaoEncontrado() {
-        Long clienteId = 1L;
+        Long clienteCodigo = 1L;
 
-        when(clienteRepository.existsById(clienteId)).thenReturn(false);
+        when(clienteRepository.existsById(clienteCodigo)).thenReturn(false);
 
-        ValidationException exception = assertThrows(ValidationException.class,
-                () -> clienteService.excluirCliente(clienteId),
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+                () -> clienteService.excluirCliente(clienteCodigo),
                 "Deveria lançar uma exceção quando o cliente não é encontrado.");
 
         assertEquals("Cliente não encontrado", exception.getMessage(),
