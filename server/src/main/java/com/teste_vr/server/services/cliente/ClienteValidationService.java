@@ -39,15 +39,15 @@ public class ClienteValidationService {
      */
     public void validarUpdateClienteDTO(UpdateClienteDTO updateClienteDTO, Long codigo) {
         if (codigo == null || codigo <= 0) {
-            throw new IllegalArgumentException("Código inválido.");
+            throw new IllegalArgumentException("O código não pode ser nulo ou vazio.");
         }
 
         if (updateClienteDTO.nome() != null && updateClienteDTO.nome().isEmpty()) {
-            throw new IllegalArgumentException("O nome não pode ser vazio.");
+            throw new IllegalArgumentException("O nome não pode ser nulo ou vazio.");
         }
 
         if (updateClienteDTO.limiteCompra() != null && updateClienteDTO.limiteCompra().compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("O limite de compra não pode ser negativo.");
+            throw new IllegalArgumentException("O limite de compra não pode ser nulo ou negativo.");
         }
     }
 }
