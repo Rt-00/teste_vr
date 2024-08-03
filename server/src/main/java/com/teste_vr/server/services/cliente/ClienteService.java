@@ -6,6 +6,7 @@ import com.teste_vr.server.dtos.cliente.ListClienteDTO;
 import com.teste_vr.server.dtos.cliente.UpdateClienteDTO;
 import com.teste_vr.server.mappers.ClienteMapper;
 import com.teste_vr.server.repositories.ClienteRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +62,7 @@ public class ClienteService {
         clienteValidationService.validarUpdateClienteDTO(updateClienteDTO, id);
 
         Cliente cliente = clienteRepository.findById(id).orElseThrow(
-                () -> new ValidationException("Cliente não encontrado."));
+                () -> new EntityNotFoundException("Cliente não encontrado."));
 
         if (updateClienteDTO.nome() != null) {
             cliente.setNome(updateClienteDTO.nome());
@@ -85,7 +86,7 @@ public class ClienteService {
      */
     public ListClienteDTO obterClientePorId(Long id) {
         return clienteRepository.findById(id).map(clienteMapper::toListClienteDTO)
-                .orElseThrow(() -> new ValidationException("Cliente não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
     }
 
     /**
@@ -109,7 +110,7 @@ public class ClienteService {
     public void excluirCliente(Long id) {
         Optional<Cliente> clienteOptional = clienteRepository.findById(id);
         if (clienteOptional.isEmpty()) {
-            throw new ValidationException("Cliente não encontrado");
+            throw new EntityNotFoundException("Cliente não encontrado");
         }
 
         clienteRepository.deleteById(id);
