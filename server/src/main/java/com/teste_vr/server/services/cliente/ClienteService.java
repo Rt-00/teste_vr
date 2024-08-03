@@ -48,7 +48,7 @@ public class ClienteService {
         this.clienteValidationService.validarClienteClienteDTO(createClienteDTO);
 
         if (clienteRepository.findByCodigo(createClienteDTO.codigo()).isPresent()) {
-            throw new DataIntegrityViolationException("Usuário com o código: " + createClienteDTO.codigo() +
+            throw new DataIntegrityViolationException("Cliente com o código: " + createClienteDTO.codigo() +
                     " já cadastrado.");
         }
 
@@ -71,6 +71,11 @@ public class ClienteService {
 
         Cliente cliente = clienteRepository.findByCodigo(codigo).orElseThrow(
                 () -> new EntityNotFoundException("Cliente não encontrado."));
+
+        if (clienteRepository.findByCodigo(codigo).isPresent()) {
+            throw new DataIntegrityViolationException("Cliente com o código: " + updateClienteDTO.codigo() +
+                    " já cadastrado.");
+        }
 
         if (updateClienteDTO.codigo() != null) {
             cliente.setCodigo(updateClienteDTO.codigo());
