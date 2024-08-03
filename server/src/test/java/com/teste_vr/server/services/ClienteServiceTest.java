@@ -16,6 +16,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -39,6 +42,62 @@ public class ClienteServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+    }
+
+    /**
+     * Testa o método {@link ClienteService#listarClientes()}.
+     * Verifica se é retornado todos os Clientes cadastrados.
+     */
+    @Test
+    public void testListarTodosClientes() {
+        ListClienteDTO clienteDTO1 = new ListClienteDTO(1L, "Cliente 1", new BigDecimal("1000.0"));
+        ListClienteDTO clienteDTO2 = new ListClienteDTO(2L, "Cliente 2", new BigDecimal("2000.0"));
+
+        List<ListClienteDTO> clientesDtos = Arrays.asList(clienteDTO1, clienteDTO2);
+
+        Cliente cliente1 = new Cliente();
+        cliente1.setNome("Cliente 1");
+        cliente1.setLimiteCompra(new BigDecimal("1000.0"));
+
+        Cliente cliente2 = new Cliente();
+        cliente2.setNome("Cliente 1");
+        cliente2.setLimiteCompra(new BigDecimal("1000.0"));
+
+        List<Cliente> clientes = Arrays.asList(cliente1, cliente2);
+
+        when(clienteRepository.findAll()).thenReturn(clientes);
+        when(clienteMapper.toListClienteDTO(cliente1)).thenReturn(clienteDTO1);
+        when(clienteMapper.toListClienteDTO(cliente2)).thenReturn(clienteDTO2);
+
+        List<ListClienteDTO> resultado = clienteService.listarClientes();
+
+        assertNotNull(resultado);
+        assertEquals(2, resultado.size());
+        assertEquals("Cliente 1", resultado.get(0).nome());
+        assertEquals("Cliente 2", resultado.get(1).nome());
+    }
+
+    /**
+     * Testa o método {@link ClienteService#listarClientes()}.
+     * Verifica se é retornado todos os Clientes cadastrados.
+     */
+    @Test
+    public void testListarClientePorId() {
+        ListClienteDTO clienteDTO1 = new ListClienteDTO(1L, "Cliente 1", new BigDecimal("1000.0"));
+
+        Cliente cliente1 = new Cliente();
+        cliente1.setNome("Cliente 1");
+        cliente1.setLimiteCompra(new BigDecimal("1000.0"));
+
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente1));
+        when(clienteMapper.toListClienteDTO(cliente1)).thenReturn(clienteDTO1);
+
+        ListClienteDTO resultado = clienteService.obterClientePorId(1L);
+
+        assertNotNull(resultado);
+        assertEquals("Cliente 1", resultado.nome());
+        assertEquals(new BigDecimal("1000.0"), resultado.limiteCompra());
+
     }
 
     /**
