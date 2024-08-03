@@ -13,7 +13,8 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> EntidadeNaoEncontrada(EntityNotFoundException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), "404");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDTO);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
