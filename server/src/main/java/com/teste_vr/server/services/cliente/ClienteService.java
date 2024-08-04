@@ -72,11 +72,6 @@ public class ClienteService {
         Cliente cliente = clienteRepository.findByCodigo(codigo).orElseThrow(
                 () -> new EntityNotFoundException("Cliente não encontrado."));
 
-        if (clienteRepository.findByCodigo(codigo).isPresent()) {
-            throw new DataIntegrityViolationException("Cliente com o código: " + updateClienteDTO.codigo() +
-                    " já cadastrado.");
-        }
-
         if (updateClienteDTO.codigo() != null) {
             cliente.setCodigo(updateClienteDTO.codigo());
         }
