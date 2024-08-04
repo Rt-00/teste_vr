@@ -3,7 +3,7 @@ package com.teste_vr.server.domain;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Date;
 
 /**
  * Classe que representa um Cliente.
@@ -36,11 +36,8 @@ public class Cliente {
     @Column(nullable = false)
     private BigDecimal limiteCompra;
 
-    /**
-     * Lista de Faturas do Cliente.
-     */
-    @OneToMany(mappedBy = "cliente")
-    private List<Fatura> faturas;
+    @Column(nullable = false)
+    private Date dataFechamentoFatura;
 
     /**
      * Construtor sem argumentos.
@@ -103,24 +100,6 @@ public class Cliente {
     }
 
     /**
-     * Retorna a {@link List} de {@link Fatura} do Cliente.
-     *
-     * @return A {@link List} de {@link Fatura} do Cliente.
-     */
-    public List<Fatura> getFaturas() {
-        return faturas;
-    }
-
-    /**
-     * Define a {@link List} de Faturas do Cliente.
-     *
-     * @param faturas A {@link List} de Faturas do Cliente.
-     */
-    public void setFaturas(List<Fatura> faturas) {
-        this.faturas = faturas;
-    }
-
-    /**
      * Retorna o código do Cliente.
      *
      * @return O Código do Cliente.
@@ -136,5 +115,23 @@ public class Cliente {
      */
     public void setCodigo(Long codigo) {
         this.codigo = codigo;
+    }
+
+    /**
+     * Retorna a Data de Fechamento da Fatura.
+     *
+     * @return A Data de Fechamento da Fatura.
+     */
+    public Date getDataFechamentoFatura() {
+        return dataFechamentoFatura;
+    }
+
+    /**
+     * Define a Data de Fechamento da Fatura.
+     *
+     * @param dataFechamentoFatura A Data de Fechamento da Fatura.
+     */
+    public void setDataFechamentoFatura(Date dataFechamentoFatura) {
+        this.dataFechamentoFatura = dataFechamentoFatura;
     }
 }

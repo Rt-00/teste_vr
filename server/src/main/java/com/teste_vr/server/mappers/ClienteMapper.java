@@ -23,6 +23,7 @@ public class ClienteMapper {
         cliente.setCodigo(createClienteDTO.codigo());
         cliente.setNome(createClienteDTO.nome());
         cliente.setLimiteCompra(createClienteDTO.limiteCompra());
+        cliente.setDataFechamentoFatura(createClienteDTO.dataFechamentoFatura());
         return cliente;
     }
 
@@ -30,7 +31,7 @@ public class ClienteMapper {
      * Converte um DTO de atualização de Cliente numa entidade Cliente.
      *
      * @param updateClienteDTO O {@link UpdateClienteDTO} que será convertido em {@link Cliente}.
-     * @param codigo               O Código do Cliente.
+     * @param codigo           O Código do Cliente.
      * @return A entidade {@link Cliente} correspondente.
      */
     public Cliente toEntity(UpdateClienteDTO updateClienteDTO, Long codigo) {
@@ -38,6 +39,7 @@ public class ClienteMapper {
         cliente.setCodigo(updateClienteDTO.codigo());
         cliente.setNome(updateClienteDTO.nome());
         cliente.setLimiteCompra(updateClienteDTO.limiteCompra());
+        cliente.setDataFechamentoFatura(updateClienteDTO.dataFechamentoFatura());
         return cliente;
     }
 
@@ -51,7 +53,8 @@ public class ClienteMapper {
         return new ListClienteDTO(
                 cliente.getCodigo(),
                 cliente.getNome(),
-                cliente.getLimiteCompra()
+                cliente.getLimiteCompra(),
+                cliente.getDataFechamentoFatura()
         );
     }
 }

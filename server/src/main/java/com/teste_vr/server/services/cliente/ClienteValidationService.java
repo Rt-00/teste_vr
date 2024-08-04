@@ -26,8 +26,13 @@ public class ClienteValidationService {
         if (createClienteDTO.nome() == null || createClienteDTO.nome().isEmpty()) {
             throw new IllegalArgumentException("O nome não pode ser nulo ou vazio.");
         }
+
         if (createClienteDTO.limiteCompra() == null || createClienteDTO.limiteCompra().compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("O limite de compra não pode ser nulo ou negativo.");
+        }
+
+        if (createClienteDTO.dataFechamentoFatura() == null) {
+            throw new IllegalArgumentException("A data de fechamento da fatura não pode ser nula");
         }
     }
 
@@ -48,6 +53,10 @@ public class ClienteValidationService {
 
         if (updateClienteDTO.limiteCompra() != null && updateClienteDTO.limiteCompra().compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("O limite de compra não pode ser nulo ou negativo.");
+        }
+
+        if (updateClienteDTO.dataFechamentoFatura() == null) {
+            throw new IllegalArgumentException("A data de fechamento da fatura não pode ser nula");
         }
     }
 }

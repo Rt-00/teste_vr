@@ -1,6 +1,7 @@
 package com.teste_vr.server.dtos.cliente;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * DTO para atualização de Clientes.
@@ -8,10 +9,12 @@ import java.math.BigDecimal;
  * @param codigo       O Código do Cliente.
  * @param nome         O Nome do Cliente.
  * @param limiteCompra O Limite de Compra do Cliente.
+ * @param dataFechamentoFatura A Data de Fechamento da Fatura.
  */
 public record UpdateClienteDTO(
         Long codigo,
         String nome,
-        BigDecimal limiteCompra
+        BigDecimal limiteCompra,
+        Date dataFechamentoFatura
 ) {
 }
