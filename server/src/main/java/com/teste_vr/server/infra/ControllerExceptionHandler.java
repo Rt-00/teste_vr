@@ -19,8 +19,8 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> EntidadeDuplicada(DataIntegrityViolationException exception) {
-        ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), "400");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDTO);
+        ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), "409");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(exceptionDTO);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
