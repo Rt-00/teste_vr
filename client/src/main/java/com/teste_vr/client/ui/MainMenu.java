@@ -2,8 +2,11 @@ package com.teste_vr.client.ui;
 
 import com.teste_vr.client.dtos.api.ApiResponse;
 import com.teste_vr.client.dtos.clientes.ClienteDTO;
+import com.teste_vr.client.dtos.produto.ProdutoDTO;
 import com.teste_vr.client.services.cliente.ClienteService;
+import com.teste_vr.client.services.produto.ProdutoService;
 import com.teste_vr.client.ui.cliente.ClienteScreenFrame;
+import com.teste_vr.client.ui.produto.ProdutoScreenFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,6 +53,12 @@ public class MainMenu extends JFrame {
             }
         });
 
+        produtoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                abrirCadastroProduto();
+            }
+        });
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
@@ -76,6 +85,24 @@ public class MainMenu extends JFrame {
         }
     }
 
+    private void abrirCadastroProduto() {
+        List<ProdutoDTO> produtoDTOS;
+        try {
+            ProdutoService produtoService = new ProdutoService();
+            ApiResponse<List<ProdutoDTO>> response = produtoService.getProdutosCadastrados();
+
+            if (response.getStatus() == 200) {
+                produtoDTOS = response.getData();
+                SwingUtilities.invokeLater(() -> new ProdutoScreenFrame(produtoDTOS).setVisible(true));
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao obter produtos da API. Status: " +
+                        response.getStatus(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao obter produtos da API.", "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MainMenu().setVisible(true));
