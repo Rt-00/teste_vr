@@ -16,7 +16,7 @@ public class ClienteTableModel extends AbstractTableModel {
     private final List<ClienteDTO> clientes;
 
     /**
-     * Coluna das Tabelas.
+     * Colunas das Tabela.
      */
     private final String[] colunas = {"Código", "Nome", "Limite de Compra", "Data de Fechamento"};
 

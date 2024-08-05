@@ -2,7 +2,7 @@ package com.teste_vr.client.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.teste_vr.client.dtos.ExceptionDTO;
+import com.teste_vr.client.dtos.exception.ExceptionDTO;
 import com.teste_vr.client.dtos.api.ApiResponse;
 import com.teste_vr.client.dtos.clientes.ClienteDTO;
 
@@ -49,7 +49,7 @@ public class ClienteAPIClient {
      * @throws IOException caso a resposta seja diferente de 201.
      * @throws Exception   outra exceção qualquer.
      */
-    public void salvarCliente(ClienteDTO clienteDTO) throws IOException, InterruptedException {
+    public void salvarCliente(ClienteDTO clienteDTO) throws IOException, Exception {
         String jsonBody = objectMapper.writeValueAsString(clienteDTO);
 
         HttpRequest request = HttpRequest.newBuilder()

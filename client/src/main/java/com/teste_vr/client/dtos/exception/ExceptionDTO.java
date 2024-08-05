@@ -1,4 +1,4 @@
-package com.teste_vr.client.dtos;
+package com.teste_vr.client.dtos.exception;
 
 /**
  * DTO para representação das Exceções retornadas do servidor.

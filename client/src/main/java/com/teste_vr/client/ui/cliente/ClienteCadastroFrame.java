@@ -58,7 +58,7 @@ public class ClienteCadastroFrame extends JFrame {
     private final Consumer<ClienteDTO> onSaveCallback;
 
     /**
-     * Construtor
+     * Construtor.
      *
      * @param cliente        DTO de Cliente para atualização.
      * @param onSaveCallback Consumer de Cliente, para as operações entre telas.
@@ -77,17 +77,17 @@ public class ClienteCadastroFrame extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10);
 
         JLabel codigoLabel = new JLabel("Código:");
-        codigoField = new JTextField(15);
+        codigoField = new JTextField(20);
 
         if (cliente != null) {
             codigoField.setEnabled(false);
         }
 
         JLabel nomeLabel = new JLabel("Nome:");
-        nomeField = new JTextField(15);
+        nomeField = new JTextField(20);
 
         JLabel limiteCompraLabel = new JLabel("Limite de Compra:");
-        limiteCompraField = new JTextField(15);
+        limiteCompraField = new JTextField(20);
 
         JLabel lblDataFechamentoFatura = new JLabel("Data Fechamento Fatura:");
 
@@ -188,7 +188,7 @@ public class ClienteCadastroFrame extends JFrame {
         }
 
         try {
-            Long codigo = Long.parseLong(codigoField.getText());
+            Long.parseLong(codigoField.getText());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this,
                     "Código inválido", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -204,7 +204,7 @@ public class ClienteCadastroFrame extends JFrame {
         }
 
         try {
-            BigDecimal limiteCompraNumber = new BigDecimal(limiteCompraField.getText());
+            new BigDecimal(limiteCompraField.getText());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this,
                     "Limite de Compra inválido", "Erro", JOptionPane.ERROR_MESSAGE);
