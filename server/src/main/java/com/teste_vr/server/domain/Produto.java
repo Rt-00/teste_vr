@@ -18,6 +18,12 @@ public class Produto {
     private Long id;
 
     /**
+     * Código do produto.
+     */
+    @Column(nullable = false)
+    private Long codigo;
+
+    /**
      * Descrição do Produto.
      */
     @Column(nullable = false)
@@ -87,5 +93,23 @@ public class Produto {
      */
     public void setPreco(BigDecimal preco) {
         this.preco = preco;
+    }
+
+    /**
+     * Retorna o código do Produto.
+     *
+     * @return O Código do Produto.
+     */
+    public Long getCodigo() {
+        return codigo;
+    }
+
+    /**
+     * Define o Código do Produto.
+     *
+     * @param codigo O Código do Produto.
+     */
+    public void setCodigo(Long codigo) {
+        this.codigo = codigo;
     }
 }
