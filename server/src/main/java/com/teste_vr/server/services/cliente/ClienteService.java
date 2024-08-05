@@ -12,15 +12,25 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Service responsável por gerenciar operações relacionadas a Clientes.
  */
 @Service
 public class ClienteService {
+    /**
+     * Repositório de Clientes.
+     */
     private final ClienteRepository clienteRepository;
+
+    /**
+     * Service de validação de Clientes.
+     */
     private final ClienteValidationService clienteValidationService;
+
+    /**
+     * Mapper de Clientes.
+     */
     private final ClienteMapper clienteMapper;
 
     /**
@@ -42,10 +52,10 @@ public class ClienteService {
      * Salva um novo Cliente no banco de dados.
      *
      * @param createClienteDTO Um {@link CreateClienteDTO} contendo os dados do Cliente a ser criado.
-     * @return O {@link CreateClienteDTO} do Cliente criado.
+     * @return O {@link ListClienteDTO} do Cliente criado.
      */
     public ListClienteDTO salvarCliente(CreateClienteDTO createClienteDTO) {
-        this.clienteValidationService.validarClienteClienteDTO(createClienteDTO);
+        this.clienteValidationService.validarCreateClienteDTO(createClienteDTO);
 
         if (clienteRepository.findByCodigo(createClienteDTO.codigo()).isPresent()) {
             throw new DataIntegrityViolationException("Cliente com o código: " + createClienteDTO.codigo() +

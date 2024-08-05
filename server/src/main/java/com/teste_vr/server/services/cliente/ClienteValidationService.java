@@ -18,7 +18,7 @@ public class ClienteValidationService {
      * @param createClienteDTO O {@link CreateClienteDTO} contendo os dados do Cliente a ser validado.
      * @throws IllegalArgumentException Se algum dado do Cliente for inválido.
      */
-    public void validarClienteClienteDTO(CreateClienteDTO createClienteDTO) {
+    public void validarCreateClienteDTO(CreateClienteDTO createClienteDTO) {
         if (createClienteDTO.codigo() == null || createClienteDTO.codigo() <= 0) {
             throw new IllegalArgumentException("O código não pode ser nulo ou vazio.");
         }
