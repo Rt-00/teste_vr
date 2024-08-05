@@ -19,6 +19,9 @@ import java.util.List;
 @RequestMapping("/clientes")
 public class ClienteController {
 
+    /**
+     * Serviço de Cliente.
+     */
     private final ClienteService clienteService;
 
     /**
