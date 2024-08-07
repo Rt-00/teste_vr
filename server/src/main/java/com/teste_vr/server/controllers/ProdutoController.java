@@ -61,7 +61,7 @@ public class ProdutoController {
      * @return Uma {@link ResponseEntity} com o {@link ListProdutoDTO} do Produto atualizado.
      */
     @PutMapping("/{codigo}")
-    public ResponseEntity<ListProdutoDTO> atualizarCliente(@PathVariable Long codigo,
+    public ResponseEntity<ListProdutoDTO> atualizarProduto(@PathVariable Long codigo,
                                                            @RequestBody UpdateProdutoDTO UpdateProdutoDTO) {
         ListProdutoDTO produtoAtualizado = produtoService.atualizarProduto(UpdateProdutoDTO, codigo);
         return new ResponseEntity<>(produtoAtualizado, HttpStatus.OK);

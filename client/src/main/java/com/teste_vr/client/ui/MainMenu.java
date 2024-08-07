@@ -2,10 +2,13 @@ package com.teste_vr.client.ui;
 
 import com.teste_vr.client.dtos.api.ApiResponse;
 import com.teste_vr.client.dtos.clientes.ClienteDTO;
+import com.teste_vr.client.dtos.pedidos.PedidoDTO;
 import com.teste_vr.client.dtos.produto.ProdutoDTO;
 import com.teste_vr.client.services.cliente.ClienteService;
+import com.teste_vr.client.services.pedido.PedidoService;
 import com.teste_vr.client.services.produto.ProdutoService;
 import com.teste_vr.client.ui.cliente.ClienteScreenFrame;
+import com.teste_vr.client.ui.pedido.PedidoScreenFrame;
 import com.teste_vr.client.ui.produto.ProdutoScreenFrame;
 
 import javax.swing.*;
@@ -59,6 +62,14 @@ public class MainMenu extends JFrame {
                 abrirCadastroProduto();
             }
         });
+
+        pedidoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                abrirCadastroPedido();
+            }
+        });
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
@@ -100,6 +111,25 @@ public class MainMenu extends JFrame {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao obter produtos da API.", "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void abrirCadastroPedido() {
+        List<PedidoDTO> pedidoDTOS;
+        try {
+            PedidoService pedidoService = new PedidoService();
+            ApiResponse<List<PedidoDTO>> response = pedidoService.getPedidosCadastrados();
+
+            if (response.getStatus() == 200) {
+                pedidoDTOS = response.getData();
+                SwingUtilities.invokeLater(() -> new PedidoScreenFrame(pedidoDTOS).setVisible(true));
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao obter pedidos da API. Status: " +
+                        response.getStatus(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao obter pedidos da API.", "Erro",
                     JOptionPane.ERROR_MESSAGE);
         }
     }

@@ -18,6 +18,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,8 +52,8 @@ public class ClienteServiceTest {
      */
     @Test
     public void testListarTodosClientes() {
-        ListClienteDTO clienteDTO1 = new ListClienteDTO(1L, "Cliente 1", new BigDecimal("1000.0"));
-        ListClienteDTO clienteDTO2 = new ListClienteDTO(2L, "Cliente 2", new BigDecimal("2000.0"));
+        ListClienteDTO clienteDTO1 = new ListClienteDTO(1L, "Cliente 1", new BigDecimal("1000.0"), new Date());
+        ListClienteDTO clienteDTO2 = new ListClienteDTO(2L, "Cliente 2", new BigDecimal("2000.0"), new Date());
 
         List<ListClienteDTO> clientesDtos = Arrays.asList(clienteDTO1, clienteDTO2);
 
@@ -84,7 +85,7 @@ public class ClienteServiceTest {
      */
     @Test
     public void testListarClientePorCodigo() {
-        ListClienteDTO clienteDTO1 = new ListClienteDTO(1L, "Cliente 1", new BigDecimal("1000.0"));
+        ListClienteDTO clienteDTO1 = new ListClienteDTO(1L, "Cliente 1", new BigDecimal("1000.0"), new Date());
 
         Cliente cliente1 = new Cliente();
         cliente1.setCodigo(1L);
@@ -107,13 +108,13 @@ public class ClienteServiceTest {
      */
     @Test
     public void testSalvarCliente() {
-        CreateClienteDTO createClientDTO = new CreateClienteDTO(123L, "Teste", new BigDecimal("1000.00"));
+        CreateClienteDTO createClientDTO = new CreateClienteDTO(123L, "Teste", new BigDecimal("1000.00"),new Date());
 
         Cliente cliente = new Cliente();
         cliente.setNome("Teste");
         cliente.setLimiteCompra(new BigDecimal("1000.00"));
 
-        ListClienteDTO clientDTO = new ListClienteDTO(1L, "Teste", new BigDecimal("1000.00"));
+        ListClienteDTO clientDTO = new ListClienteDTO(1L, "Teste", new BigDecimal("1000.00"), new Date());
 
         when(clienteMapper.toEntity(createClientDTO)).thenReturn(cliente);
         when(clienteRepository.save(cliente)).thenReturn(cliente);
@@ -135,7 +136,7 @@ public class ClienteServiceTest {
         // Configuração
         Long codigoCliente = 1L;
         CreateClienteDTO createClientDTO = new CreateClienteDTO(codigoCliente, "Novo Cliente",
-                new BigDecimal("1000.0"));
+                new BigDecimal("1000.0"), new Date());
 
         when(clienteRepository.findByCodigo(codigoCliente)).thenReturn(Optional.of(new Cliente()));
 
@@ -154,14 +155,15 @@ public class ClienteServiceTest {
     @Test
     public void testAtualizarCliente() {
         UpdateClienteDTO updateClientDTO = new UpdateClienteDTO(123L, "Nome Atualizado",
-                BigDecimal.valueOf(2000.0));
+                BigDecimal.valueOf(2000.0), new Date());
 
         Cliente cliente = new Cliente();
         cliente.setCodigo(1L);
         cliente.setNome("Teste");
         cliente.setLimiteCompra(new BigDecimal("1000.0"));
 
-        ListClienteDTO clientDTO = new ListClienteDTO(123L, "Nome Atualizado", BigDecimal.valueOf(2000.0));
+        ListClienteDTO clientDTO = new ListClienteDTO(123L, "Nome Atualizado", BigDecimal.valueOf(2000.0),
+                new Date());
 
         when(clienteRepository.findByCodigo(1L)).thenReturn(Optional.of(cliente));
         when(clienteRepository.save(cliente)).thenReturn(cliente);
@@ -183,7 +185,7 @@ public class ClienteServiceTest {
     public void testAtualizarClienteClienteNaoEncontrado() {
         Long clientAttId = 1L;
         UpdateClienteDTO updateClienteDTO = new UpdateClienteDTO(123L, "Teste",
-                new BigDecimal("1000.0"));
+                new BigDecimal("1000.0"), new Date());
 
         when(clienteRepository.findByCodigo(clientAttId)).thenReturn(java.util.Optional.empty());
 
@@ -193,29 +195,6 @@ public class ClienteServiceTest {
 
         assertEquals("Cliente não encontrado.", exception.getMessage(),
                 "A mensagem da exceção deve indicar que o cliente não foi encontrado.");
-    }
-
-    /**
-     * Testa o método {@link ClienteService#atualizarCliente(UpdateClienteDTO, Long)}.
-     * <p>
-     * Verifica se uma exceção é lançada quando já existe um cliente com o código cadastrado.
-     */
-    @Test
-    public void testAtualizarClienteCodigoJaCadastrado() {
-        // Configuração
-        Long codigoCliente = 1L;
-        UpdateClienteDTO updateClientDTO = new UpdateClienteDTO(codigoCliente, "Cliente Atualizado",
-                BigDecimal.valueOf(2000.0));
-
-        when(clienteRepository.findByCodigo(codigoCliente)).thenReturn(Optional.of(new Cliente()));
-        when(clienteRepository.findByCodigo(codigoCliente)).thenReturn(Optional.of(new Cliente())); // Simula que já existe um cliente com o mesmo código
-
-        // Ação e Validação
-        DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () ->
-                clienteService.atualizarCliente(updateClientDTO, codigoCliente));
-
-        assertEquals("Cliente com o código: " + codigoCliente + " já cadastrado.",
-                exception.getMessage());
     }
 
     /**

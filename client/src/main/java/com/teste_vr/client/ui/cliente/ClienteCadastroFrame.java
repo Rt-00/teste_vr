@@ -92,7 +92,7 @@ public class ClienteCadastroFrame extends JFrame {
         JLabel lblDataFechamentoFatura = new JLabel("Data Fechamento Fatura:");
 
         dateChooser = new JDateChooser();
-        dateChooser.setDateFormatString("yyyy-MM-dd"); // Formato da data
+        dateChooser.setDateFormatString("dd/MM/yyyy"); // Formato da data
 
         gbc.gridx = 0;
         gbc.gridy = 0;

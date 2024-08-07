@@ -120,4 +120,9 @@ public class ClienteDTO {
     public void setCodigo(Long codigo) {
         this.codigo = codigo;
     }
+
+    @Override
+    public String toString() {
+        return codigo + " - " + nome;
+    }
 }

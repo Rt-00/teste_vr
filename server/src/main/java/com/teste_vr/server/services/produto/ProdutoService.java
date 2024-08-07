@@ -78,7 +78,7 @@ public class ProdutoService {
         produtoValidationService.validarUpdateProdutoDTO(updateProdutoDTO, codigo);
 
         Produto produto = produtoRepository.findByCodigo(codigo).orElseThrow(
-                () -> new EntityNotFoundException("Cliente não encontrado."));
+                () -> new EntityNotFoundException("Produto não encontrado."));
 
         if (updateProdutoDTO.codigo() != null) {
             produto.setCodigo(updateProdutoDTO.codigo());
@@ -120,5 +120,10 @@ public class ProdutoService {
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
 
         produtoRepository.delete(produto);
+    }
+
+    public ListProdutoDTO obterProdutoPorCodigo(Long codigo) {
+        return produtoRepository.findByCodigo(codigo).map(produtoMapper::toListProdutoDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
     }
 }

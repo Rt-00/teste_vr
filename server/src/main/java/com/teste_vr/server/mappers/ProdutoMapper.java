@@ -39,6 +39,14 @@ public class ProdutoMapper {
         return produto;
     }
 
+    public CreateProdutoDTO toCreateProdutoDTO(ListProdutoDTO listProdutoDTO) {
+        return new CreateProdutoDTO(
+                listProdutoDTO.codigo(),
+                listProdutoDTO.descricao(),
+                listProdutoDTO.preco()
+        );
+    }
+
     /**
      * Converte uma entidade Produto em um DTO de Listagem de Produto.
      *

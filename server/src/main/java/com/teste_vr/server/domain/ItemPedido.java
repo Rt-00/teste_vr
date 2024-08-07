@@ -17,18 +17,21 @@ public class ItemPedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private Long codigo;
+
     /**
      * Pedido que contém esse Item de Pedido.
      */
     @ManyToOne
-    @JoinColumn(name = "pedido_id", nullable = false)
+    @JoinColumn(name = "pedido_id", nullable = true)
     private Pedido pedido;
 
     /**
      * Produto que representa esse Item de Pedido.
      */
     @ManyToOne
-    @JoinColumn(name = "produto_id", nullable = false)
+    @JoinColumn(name = "produto_id", nullable = true)
     private Produto produto;
 
     /**
@@ -137,5 +140,13 @@ public class ItemPedido {
      */
     public void setPreco(BigDecimal preco) {
         this.preco = preco;
+    }
+
+    public Long getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(Long codigo) {
+        this.codigo = codigo;
     }
 }

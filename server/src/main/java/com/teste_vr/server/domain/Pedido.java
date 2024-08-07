@@ -3,6 +3,7 @@ package com.teste_vr.server.domain;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,6 +20,12 @@ public class Pedido {
     private Long id;
 
     /**
+     * Código do Pedido.
+     */
+    @Column(nullable = false)
+    private Long codigo;
+
+    /**
      * Cliente que realizou o Pedido.
      */
     @ManyToOne
@@ -28,7 +35,7 @@ public class Pedido {
     /**
      * Lista de Itens do Pedido.
      */
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ItemPedido> itens;
 
     /**
@@ -113,5 +120,23 @@ public class Pedido {
      */
     public void setValorTotal(BigDecimal valorTotal) {
         this.valorTotal = valorTotal;
+    }
+
+    /**
+     * Retorna o código do Pedido.
+     *
+     * @return O Código do Pedido.
+     */
+    public Long getCodigo() {
+        return codigo;
+    }
+
+    /**
+     * Define o código do Pedido.
+     *
+     * @param codigo O Código do Pedido.
+     */
+    public void setCodigo(Long codigo) {
+        this.codigo = codigo;
     }
 }

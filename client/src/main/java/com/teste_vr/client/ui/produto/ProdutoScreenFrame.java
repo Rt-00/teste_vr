@@ -92,14 +92,14 @@ public class ProdutoScreenFrame extends JFrame {
         btnExcluir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deleteCliente();
+                deleteProduto();
             }
         });
 
         btnAtualizar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateCliente();
+                updateProduto();
             }
         });
     }
@@ -124,7 +124,7 @@ public class ProdutoScreenFrame extends JFrame {
     /**
      * Abre o {@link ProdutoCadastroFrame} passando o Produto selecionado para ser atualizado.
      */
-    private void updateCliente() {
+    private void updateProduto() {
         int selectedRow = produtosTable.getSelectedRow();
         if (selectedRow >= 0) {
             ProdutoDTO produto = tableModel.getProdutoAt(selectedRow);
@@ -138,7 +138,7 @@ public class ProdutoScreenFrame extends JFrame {
     /**
      * Método para excluir o Produto selecionado.
      */
-    private void deleteCliente() {
+    private void deleteProduto() {
         int selectedRow = produtosTable.getSelectedRow();
         if (selectedRow >= 0) {
             ProdutoDTO produto = tableModel.getProdutoAt(selectedRow);
@@ -157,7 +157,7 @@ public class ProdutoScreenFrame extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Selecione um cliente para excluir.",
+            JOptionPane.showMessageDialog(this, "Selecione um produto para excluir.",
                     "Erro", JOptionPane.INFORMATION_MESSAGE);
         }
     }
